@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.casaba.dao.mapper.AgentBusinessMapper" >
+  <resultMap id="BaseResultMap" type="com.casaba.dao.entity.AgentBusiness" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="agent_id" property="agentId" jdbcType="INTEGER" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="company_phone" property="companyPhone" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="contacts" property="contacts" jdbcType="VARCHAR" />
+    <result column="contact_mobile" property="contactMobile" jdbcType="VARCHAR" />
+    <result column="contact_telephone" property="contactTelephone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" javaType="java.util.Date" />
+    <result column="update_time" property="updateTime" javaType="java.util.Date" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, agent_id, company_name, company_phone, province, city, area, address, contacts,
+    contact_mobile, contact_telephone, email, qq, create_time, update_time
+  </sql>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_agent_business
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByAgentId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_agent_business
+    where agent_id = #{agentId}
+  </select>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from tb_agent_business
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.casaba.dao.entity.AgentBusiness" >
+    insert into tb_agent_business ( agent_id, company_name,
+      company_phone, province, city, 
+      area, address, contacts, 
+      contact_mobile, contact_telephone, email, 
+      qq,create_time
+      )
+    values (#{agentId}, #{companyName},
+      #{companyPhone}, #{province}, #{city},
+      #{area}, #{address}, #{contacts},
+      #{contactMobile}, #{contactTelephone}, #{email},
+      #{qq},#{createTime}
+      )
+    <selectKey keyProperty="id" resultType="java.lang.Integer" order="AFTER">
+      SELECT LAST_INSERT_ID() AS ID
+    </selectKey>
+  </insert>
+  <update id="updateById" parameterType="com.casaba.dao.entity.AgentBusiness" >
+    update tb_agent_business
+    set
+      company_name = #{companyName,jdbcType=VARCHAR},
+      company_phone = #{companyPhone,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      contacts = #{contacts,jdbcType=VARCHAR},
+      contact_mobile = #{contactMobile,jdbcType=VARCHAR},
+      contact_telephone = #{contactTelephone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      update_time = now()
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.casaba.dao.mapper.AgentChangeDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.casaba.dao.entity.AgentChangeDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="agent_id" property="agentId" jdbcType="INTEGER" />
+    <result column="change_time" property="changeTime" javaType="java.util.Date" />
+    <result column="project" property="project" jdbcType="VARCHAR" />
+    <result column="before_info" property="beforeInfo" jdbcType="VARCHAR" />
+    <result column="after_info" property="afterInfo" jdbcType="VARCHAR" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" javaType="java.util.Date" />
+    <result column="update_time" property="updateTime" javaType="java.util.Date" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, agent_id, change_time, project, before_info, after_info, operator, create_time, 
+    update_time
+  </sql>
+  <select id="selectById" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_agent_change_detail
+    where id = #{id}
+  </select>
+
+  <select id="selectAgentChangeByAgentId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from tb_agent_change_detail  where agent_id=#{agentId}
+    order by change_time desc
+  </select>
+  <insert id="insert" parameterType="com.casaba.dao.entity.AgentChangeDetail" >
+    insert into tb_agent_change_detail (agent_id, change_time,
+      project, before_info, after_info, 
+      operator,create_time
+      )
+    values (#{agentId}, #{changeTime},
+      #{project}, #{beforeInfo}, #{afterInfo},
+      #{operator},now()
+      )
+    <selectKey keyProperty="id" resultType="java.lang.Integer" order="AFTER">
+      SELECT LAST_INSERT_ID() AS ID
+    </selectKey>
+  </insert>
+
+  <insert id="batchInsert" parameterType="java.util.List" >
+    <selectKey resultType ="java.lang.Integer" keyProperty= "id" order= "AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey >
+    insert into tb_agent_change_detail
+    (agent_id, change_time,project, before_info, after_info,operator,create_time)
+    values
+    <foreach collection="agentChangeDetails" item="detail" separator =",">
+      (#{detail.agentId}, #{detail.changeTime}, #{detail.project}, #{detail.beforeInfo}, #{detail.afterInfo},#{detail.operator},#{detail.createTime}
+      )
+    </foreach>
+  </insert>
+</mapper>

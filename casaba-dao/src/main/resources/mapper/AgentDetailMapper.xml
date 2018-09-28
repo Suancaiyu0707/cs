@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.casaba.dao.mapper.AgentDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.casaba.dao.entity.AgentDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="agent_id" property="agentId" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" javaType="java.util.Date" />
+    <result column="end_time" property="endTime" javaType="java.util.Date" />
+    <result column="agent_level" property="agentLevel" jdbcType="VARCHAR" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="cash_deposit" property="cashDeposit" jdbcType="DECIMAL" />
+    <result column="balance" property="balance" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <!--<result column="province" property="province" jdbcType="VARCHAR" />-->
+    <!--<result column="city" property="city" jdbcType="VARCHAR" />-->
+    <!--<result column="area" property="area" jdbcType="VARCHAR" />-->
+    <result column="province_city_area" property="provinceCityArea" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" javaType="java.util.Date" />
+    <result column="update_time" property="updateTime" javaType="java.util.Date" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, agent_id, start_time, end_time, agent_level, discount, cash_deposit, balance, 
+    remark, province_city_area, create_time, update_time
+  </sql>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_agent_detail
+    where id = #{id}
+  </select>
+    <select id="selectByAgentId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_agent_detail
+    where agent_id = #{agentId}
+  </select>
+
+  <select id="queryAgentDetails" resultType="java.util.Map"  >
+    select agent.id,
+      agent.mobile , agent.agent_name,detail.agent_level,detail.discount,
+      detail.cash_deposit,detail.balance,detail.province_city_area,
+      agent.create_time ,detail.end_time ,agent.status
+    from tb_agent agent,tb_agent_detail detail, tb_agent_business business
+    where agent.id = detail.agent_id and agent.id=business.agent_id
+      <if test="discount_dt !=null and discount_dt!=''">
+        and detail.discount &gt;= #{discount_dt}
+      </if>
+    <if test="discount_ft !=null and discount_ft!=''">
+      and detail.discount &lt;= #{discount_ft}
+    </if>
+    <if test="status !=null and status!=''">
+      and agent.status=#{status}
+    </if>
+    <if test="provinceCityArea !=null and provinceCityArea!=''">
+      and detail.province_city_area like concat('%',#{provinceCityArea},'%')
+    </if>
+    <!--<if test="city !=null and city!=''">-->
+      <!--and detail.city=#{city}-->
+    <!--</if>-->
+    <!--<if test="area !=null and area!=''">-->
+      <!--and detail.area=#{area}-->
+    <!--</if>-->
+    <if test="remark !=null and remark!=''">
+      and (agent.mobile like concat('%',#{remark},'%') or agent.agent_name like concat('%',#{remark},'%'))
+    </if>
+    order by agent.create_time desc
+  </select>
+  <delete id="deleteById">
+    delete from tb_agent_detail
+    where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.casaba.dao.entity.AgentDetail" >
+    insert into
+      tb_agent_detail(agent_id,start_time,end_time,agent_level,discount,cash_deposit,balance, remark, province_city_area,create_time)
+            values (#{agentId},#{startTime},#{endTime}, #{agentLevel}, #{discount},#{cashDeposit}, #{balance}, #{remark},#{provinceCityArea},#{createTime})
+    <selectKey keyProperty="id" resultType="java.lang.Integer" order="AFTER">
+      SELECT LAST_INSERT_ID() AS ID
+    </selectKey>
+  </insert>
+ <update id="updateById" parameterType="com.casaba.dao.entity.AgentDetail" >
+    update tb_agent_detail
+    set
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      agent_level = #{agentLevel,jdbcType=VARCHAR},
+      discount = #{discount,jdbcType=DECIMAL},
+      balance = #{balance,jdbcType=DECIMAL},
+      province_city_area = #{provinceCityArea,jdbcType=VARCHAR},
+      update_time = now()
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <update id="batchUpdateLevel" >
+    update tb_agent_detail
+    set
+      agent_level=#{level},update_time = now()
+    <where>
+        <foreach collection="ids" item="item" separator="," open=" id in(" close=")">
+            #{item}
+        </foreach>
+    </where>
+
+  </update>
+
+    <update id="batchUpdateDiscount" >
+        update tb_agent_detail
+        set
+        discount=#{discount},update_time = now()
+        <where>
+            <foreach collection="ids" item="item" separator="," open=" id in(" close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+
+  <update id="adjustBalance">
+    update tb_agent_detail set balance=balance+#{amount},update_time = now()  where agent_id=#{agentId}
+  </update>
+  <update id="deductionBalance">
+    update tb_agent_detail set balance=balance-#{amount},update_time = now()  where agent_id=#{agentId}
+  </update>
+
+  <select id="queryBalance" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select 
+      d.agent_id, d.start_time, d.end_time, d.agent_level, d.discount, d.cash_deposit, d.balance
+          
+     from tb_agent_detail d,tb_agent a where a.id=d.agent_id and d.agent_id = #{agentId} and a.status='00'
+     
+  </select>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.casaba.dao.mapper.MerSetmealChangeMapper" >
+  <resultMap id="BaseResultMap" type="com.casaba.dao.entity.MerSetmealChange" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="mer_id" property="merId" jdbcType="INTEGER" />
+    <result column="change_time" property="changeTime" jdbcType="TIMESTAMP" />
+    <result column="change_type" property="changeType" jdbcType="VARCHAR" />
+    <result column="before_info" property="beforeInfo" jdbcType="VARCHAR" />
+    <result column="after_info" property="afterInfo" jdbcType="VARCHAR" />
+    <result column="before_time" property="beforeTime" jdbcType="TIMESTAMP" />
+    <result column="after_time" property="afterTime" jdbcType="TIMESTAMP" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, mer_id, change_time, change_type, before_info, after_info, before_time, after_time, 
+    start_time, operator, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mer_setmeal_change
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_mer_setmeal_change
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.casaba.dao.entity.MerSetmealChange" >
+    insert into tb_mer_setmeal_change (mer_id, change_time, 
+      change_type, before_info, after_info, 
+      before_time, after_time, start_time, 
+      operator, create_time, update_time
+      )
+    values ( #{merId,jdbcType=INTEGER}, #{changeTime,jdbcType=TIMESTAMP}, 
+      #{changeType,jdbcType=VARCHAR}, #{beforeInfo,jdbcType=VARCHAR}, #{afterInfo,jdbcType=VARCHAR}, 
+      #{beforeTime,jdbcType=TIMESTAMP}, #{afterTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{operator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+  
+   <select id="queryListByMerId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	    select 
+	    <include refid="Base_Column_List" />
+	    from tb_mer_setmeal_change
+	    where mer_id = #{merId,jdbcType=INTEGER}
+  </select>
+  
+</mapper>

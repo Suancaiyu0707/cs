@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.casaba.dao.mapper.SaleDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.casaba.dao.entity.SaleDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="sale_name" property="saleName" jdbcType="VARCHAR" />
+    <result column="mdse_id" property="mdseId" jdbcType="INTEGER" />
+    <result column="purchase_year" property="purchaseYear" jdbcType="INTEGER" />
+    <result column="give_year" property="giveYear" jdbcType="INTEGER" />
+    <result column="sell_price" property="sellPrice" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sale_name,mdse_id, purchase_year, give_year, sell_price, create_time, update_time
+  </sql>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_sale_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByMdseIdAndId" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_sale_detail
+    where id = #{id,jdbcType=INTEGER} and mdse_id = #{mdseId,jdbcType=INTEGER}
+  </select>
+  
+  
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from tb_sale_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.casaba.dao.entity.SaleDetail" >
+    insert into tb_sale_detail (sale_name, mdse_id, purchase_year, 
+      give_year, sell_price, create_time, 
+      update_time)
+    values (#{saleName,jdbcType=VARCHAR}, #{mdseId,jdbcType=INTEGER}, #{purchaseYear,jdbcType=INTEGER}, 
+      #{giveYear,jdbcType=INTEGER}, #{sellPrice,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <update id="updateByIdSelective" parameterType="com.casaba.dao.entity.SaleDetail" >
+    update tb_sale_detail
+    <set >
+      <if test="mdseId != null" >
+        mdse_id = #{mdseId,jdbcType=INTEGER},
+      </if>
+      <if test="purchaseYear != null" >
+        purchase_year = #{purchaseYear,jdbcType=INTEGER},
+      </if>
+      <if test="giveYear != null" >
+        give_year = #{giveYear,jdbcType=INTEGER},
+      </if>
+      <if test="sellPrice != null" >
+        sell_price = #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  
+  <select id="selectByMdseId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_sale_detail
+    where mdse_Id = #{mdseId,jdbcType=INTEGER} order by  purchase_year
+  </select>
+  
+  
+  
+  
+  
+  
+</mapper>

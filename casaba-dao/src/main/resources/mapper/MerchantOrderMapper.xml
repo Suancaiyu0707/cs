@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.casaba.dao.mapper.MerchantOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.casaba.dao.entity.MerchantOrder" >
+    <id column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+    <result column="merchant_id" property="merchantId" jdbcType="INTEGER" />
+    <result column="mdse_id" property="mdseId" jdbcType="INTEGER" />
+    <result column="mdse_name" property="mdseName" jdbcType="VARCHAR" />
+    <result column="purchase_year" property="purchaseYear" jdbcType="INTEGER" />
+    <result column="give_year" property="giveYear" jdbcType="INTEGER" />
+    <result column="sell_price" property="sellPrice" jdbcType="DECIMAL" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="order_type" property="orderType" jdbcType="VARCHAR" />
+    <result column="order_status" property="orderStatus" jdbcType="VARCHAR" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="consume_price" property="consumePrice" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_id, order_time, merchant_id, mdse_id, mdse_name, purchase_year, give_year, 
+    sell_price, start_time, end_time, order_type, order_status, operator, create_time, 
+    update_time, consume_price
+  </sql>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_merchant_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from tb_merchant_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.casaba.dao.entity.MerchantOrder" >
+    insert into tb_merchant_order ( order_time, merchant_id, 
+      mdse_id, mdse_name, purchase_year, 
+      give_year, sell_price, start_time, 
+      end_time, order_type, order_status, 
+      operator, create_time, update_time, 
+      consume_price)
+    values ( #{orderTime,jdbcType=TIMESTAMP}, #{merchantId,jdbcType=INTEGER}, 
+      #{mdseId,jdbcType=INTEGER}, #{mdseName,jdbcType=VARCHAR}, #{purchaseYear,jdbcType=INTEGER}, 
+      #{giveYear,jdbcType=INTEGER}, #{sellPrice,jdbcType=DECIMAL}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{orderType,jdbcType=VARCHAR}, #{orderStatus,jdbcType=VARCHAR}, 
+      #{operator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{consumePrice,jdbcType=DECIMAL})
+      
+    <selectKey keyProperty="orderId" resultType="java.lang.Integer" order="AFTER">
+      SELECT LAST_INSERT_ID() AS ORDER_ID
+    </selectKey>
+  </insert>
+ 
+  
+  
+  <update id="updateOpenById"  parameterType="com.casaba.dao.entity.MerchantOrder">
+    update tb_merchant_order
+  	 set      
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+        end_time = #{endTime,jdbcType=TIMESTAMP},      
+        order_status = #{orderStatus,jdbcType=VARCHAR},
+         consume_price = #{consumePrice,jdbcType=DECIMAL},update_time = now()
+   		 where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  
+ 
+ 
+   <update id="updateEndById"  >
+    update tb_merchant_order
+  	 set      
+        order_status = #{orderStatus,jdbcType=VARCHAR},update_time = now()   
+   		 where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  
+
+  
+  
+   <select id="queryRenewalOrderList" resultMap="BaseResultMap"  >
+	    select 
+	    <include refid="Base_Column_List" />
+	    from tb_merchant_order
+	    
+	    where  order_type = #{orderType,jdbcType=VARCHAR}
+	    
+	    and  order_status = #{orderStatus,jdbcType=VARCHAR} and      
+  		
+  		<foreach collection="merIds" item="item" separator="," open=" merchant_id in(" close=")">
+                #{item}
+        </foreach>
+ 
+  </select>
+  
+  
+   <select id="queryRenewalOrder" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_merchant_order
+
+    where  order_type = #{orderType}    
+    and  order_status = #{orderStatus}       
+  	and merchant_id = #{merId}
+ 
+  </select>
+  
+  
+   <update id="batchOrderStatus" >
+        update tb_merchant_order
+        set
+         order_status = #{orderStatus},update_time = now()
+        <where>
+            <foreach collection="orderIds" item="item" separator="," open=" order_id in(" close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+  
+  
+  
+   <select id="selectLastBymerId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	    select 
+	    <include refid="Base_Column_List" />
+	    from tb_merchant_order
+	    
+	    where  merchant_id = #{merId,jdbcType=INTEGER}
+	    order by order_id desc limit 1
+	    
+  </select>
+  
+  
+  
+</mapper>

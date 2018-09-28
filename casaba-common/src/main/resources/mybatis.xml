@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<!-- 日志组件 -->
+    <!--     <setting name="logImpl" value="STDOUT_LOGGING"/> -->
+        <!-- 这个配置使全局的映射器启用或禁用缓存 -->
+        <setting name="cacheEnabled" value="true" />
+        <!-- 是否开启驼峰命名策略，例如 user_nane 映射为 userName -->
+        <setting name="mapUnderscoreToCamelCase" value="false"/>
+	</settings>
+    <environments default="tesla">
+        <environment id="tesla">
+        	<!-- 使用JDBC的事务管理 参见mybatis官方文档-->
+            <transactionManager type="JDBC" />
+            <!-- 配置数据库连接信息 -->
+            <dataSource type="POOLED">   
+                <property name="driver" value="com.mysql.jdbc.Driver"/>  
+	            <property name="url" value="jdbc:mysql://127.0.0.1:3306/tesla?useUnicode=true&amp;characterEncoding=utf-8"/>
+	            <property name="username" value="root"/>
+	            <property name="password" value="root"/> 
+            </dataSource>
+        </environment>
+    </environments>
+      <mappers>
+        <mapper resource="com/casaba/thunder/tesla/db/SqlExecuteLogMapper.xml"/>
+        <mapper resource="com/casaba/thunder/tesla/db/SqlOperateLogMapper.xml"/>
+        <mapper resource="com/casaba/thunder/tesla/db/SqlResultStoreInfoMapper.xml"/>
+    </mappers>
+</configuration>

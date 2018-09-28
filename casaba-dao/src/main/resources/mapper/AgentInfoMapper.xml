@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.casaba.dao.mapper.AgentInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.casaba.dao.entity.AgentInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="agent_name" property="agentName" jdbcType="VARCHAR" />
+    <result column="pwd" property="pwd" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="founder" property="founder" jdbcType="VARCHAR" />
+    <result column="last_login_time" property="lastLoginTime" javaType="java.util.Date" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" javaType="java.util.Date" />
+    <result column="freeze_time" property="freezeTime" javaType="java.util.Date" />
+    <result column="update_time" property="updateTime" javaType="java.util.Date" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, agent_name, pwd, mobile, founder, last_login_time, status, create_time, freeze_time, 
+    update_time
+  </sql>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_agent
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectAgents" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from tb_agent
+        where status='00'
+    </select>
+    <select id="queryAgentInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_agent
+    where mobile = #{mobile} and pwd=#{pwd}
+  </select>
+  <update id="findAgentPasswd">
+
+    update tb_agent set pwd=#{pwd}
+    where mobile = #{mobile}
+  </update>
+  <update id="modifyAgentPasswd" >
+    update tb_agent
+    set pwd=#{pw},update_time = now()
+    where mobile=#{mobile} and pwd=#{passwd}
+  </update>
+
+  <update id="modifyLastLoginTime" >
+    update tb_hq_info
+    set  last_login_time=#{loginTime},update_time = now()
+    where id=#{id}
+  </update>
+  <select id="queryAgentByMobile" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_agent
+    where mobile = #{mobile} and status='00'
+  </select>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from tb_agent
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.casaba.dao.entity.AgentInfo" >
+
+    insert into tb_agent (agent_name, pwd,mobile, founder,
+      status,create_time)
+    values (#{agentName,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR},
+      #{mobile,jdbcType=VARCHAR}, #{founder,jdbcType=VARCHAR},
+      '00',#{createTime,jdbcType=VARCHAR})
+    <selectKey keyProperty="id" resultType="java.lang.Integer" order="AFTER">
+      SELECT LAST_INSERT_ID() AS ID
+    </selectKey>
+  </insert>
+
+  <update id="updateById" parameterType="com.casaba.dao.entity.AgentInfo" >
+    update tb_agent
+    set agent_name = #{agentName,jdbcType=VARCHAR},
+      update_time = now()
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="expireAgent" >
+    <![CDATA[
+      update tb_agent agent set agent.status='01',update_time = now() where status='00' and exists(select 1 from tb_agent_detail detail
+      where agent.id=detail.agent_id and detail.end_time < #{currentDate})
+      ]]>
+  </update>
+
+  <update id="updateAgentStatus">
+    update tb_agent set status=#{status} where id=#{id}
+  </update>
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.casaba.dao.mapper.MdseInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.casaba.dao.entity.MdseInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="mdse_name" property="mdseName" jdbcType="VARCHAR" />
+    <result column="mdse_sort" property="mdseSort" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, mdse_name, mdse_sort,create_time,update_time
+  </sql>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mdse
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from tb_mdse
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.casaba.dao.entity.MdseInfo" >
+    insert into tb_mdse (mdse_name, mdse_sort,create_time,update_time
+      )
+    values ( #{mdseName,jdbcType=VARCHAR}, #{mdseSort,jdbcType=INTEGER},
+    #{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+  <update id="updateByIdSelective" parameterType="com.casaba.dao.entity.MdseInfo" >
+    update tb_mdse
+    <set >
+      <if test="name != null" >
+        mdse_name = #{mdseName,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        mdse_sort = #{mdseSort,jdbcType=INTEGER},
+      </if>
+      update_time = now()
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateById" parameterType="com.casaba.dao.entity.MdseInfo" >
+    update tb_mdse
+    set mdse_name = #{name,jdbcType=VARCHAR},
+      mdse_sort = #{sort,jdbcType=INTEGER},
+     update_time = now()
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    
+  
+    
+  <select id="queryMdseList" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_mdse
+   	order by mdse_sort
+  </select>
+  
+  
+  
+</mapper>

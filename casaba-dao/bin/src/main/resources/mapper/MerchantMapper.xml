@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.casaba.dao.mapper.MerchantMapper" >
+  <resultMap id="BaseResultMap" type="com.casaba.dao.entity.Merchant" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="mer_name" property="merName" jdbcType="VARCHAR" />
+    <result column="mer_code" property="merCode" jdbcType="VARCHAR" />
+    <result column="pwd" property="pwd" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="mer_type" property="merType" jdbcType="VARCHAR" />
+    <result column="agent_id" property="agentId" jdbcType="INTEGER" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="mer_status" property="merStatus" jdbcType="VARCHAR" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="mdse_name" property="mdseName" jdbcType="VARCHAR" />
+    <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+    <result column="freeze_time" property="freezeTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, mer_name,mer_code, pwd, mobile, create_time, mer_type, agent_id,freeze_time, province, city, area, mer_status, 
+    operator, order_id, last_login_time,start_time,end_time,mdse_name
+  </sql>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_merchant
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from tb_merchant
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.casaba.dao.entity.Merchant" >
+    insert into tb_merchant ( mer_name,mer_code, pwd, 
+      mobile, create_time, mer_type, 
+      agent_id, province, city, 
+      area, mer_status, operator, 
+      order_id, last_login_time,start_time, 
+      end_time,mdse_name ,update_time)
+    values ( #{merName,jdbcType=VARCHAR},#{merCode,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, 
+      #{mobile,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{merType,jdbcType=VARCHAR}, 
+      #{agentId,jdbcType=INTEGER}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{area,jdbcType=VARCHAR}, #{merStatus,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
+      #{orderId,jdbcType=INTEGER}, #{lastLoginTime,jdbcType=TIMESTAMP},#{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP},#{mdseName,jdbcType=VARCHAR}
+       #{updateTime,jdbcType=TIMESTAMP},
+      )
+      
+    <selectKey keyProperty="id" resultType="java.lang.Integer" order="AFTER">
+      SELECT LAST_INSERT_ID() AS ID
+    </selectKey>
+  </insert>
+    
+  
+  <update id="updateFreezeStatusById"  >
+    update tb_merchant
+    set 
+      mer_status = #{target,jdbcType=VARCHAR},
+      freeze_time=#{freezeTime,jdbcType=TIMESTAMP},
+      update_time = now()
+    where id = #{id,jdbcType=INTEGER} and mer_status = #{curStatus,jdbcType=VARCHAR}
+  </update>
+  
+  
+    <update id="updateMerInfoById" parameterType="com.casaba.dao.entity.Merchant">
+    update tb_merchant
+     <set>
+  	 
+  	 <if test="province !=null and province!=''">
+	     province= #{province,jdbcType=VARCHAR},
+	    </if>
+	    <if test="city !=null and city!=''">
+	     city=  #{city,jdbcType=VARCHAR},
+	    </if>
+	    <if test="area !=null and area!=''">
+	      area= #{area,jdbcType=VARCHAR},
+	    </if>
+	     <if test="agentId !=null ">
+	       m.mdse_name=#{agentId,jdbcType=INTEGER}
+	    </if>
+
+    	 update_time = now()
+       </set>
+    where id = #{merId,jdbcType=INTEGER} and mer_status = #{curStatus,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <update id="updateStatusAndTimeById"  >
+    update tb_merchant
+    set 
+      mer_status = #{target,jdbcType=VARCHAR},
+      start_time= #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+     update_time = now()
+    where id = #{merId,jdbcType=INTEGER} and mer_status = #{curStatus,jdbcType=VARCHAR}
+  </update>
+  
+    <update id="updateStatusAndTimeMdseNameById"  >
+    update tb_merchant
+    set 
+      mer_status = #{target,jdbcType=VARCHAR},
+      start_time= #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      mdse_name=#{mdseName,jdbcType=VARCHAR},
+      mdse_id=#{mdseId,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=INTEGER},
+      update_time = now()
+    where id = #{merId,jdbcType=INTEGER} 
+  </update>
+  
+  
+   <update id="updateOrderIdById" >
+    update tb_merchant
+  	 set  
+        order_id = #{orderId,jdbcType=INTEGER},
+        update_time = now()
+   		  where id = #{merId,jdbcType=INTEGER}
+  </update>
+  
+   <update id="updateStaTypeAndOrderIdById" >
+    update tb_merchant
+  	 set  
+  	 	 mer_type = #{merType,jdbcType=VARCHAR},
+  	 	 mer_status = #{target,jdbcType=VARCHAR},
+        order_id = #{orderId,jdbcType=INTEGER},
+        agent_id = #{agentId,jdbcType=INTEGER},
+        update_time = now()
+   		  where id = #{merId,jdbcType=INTEGER}
+  </update>
+  
+  
+   <update id="updateStatusAndOrderIdById" >
+    update tb_merchant
+  	 set  
+  	 	 mer_status = #{target,jdbcType=VARCHAR},
+        order_id = #{orderId,jdbcType=INTEGER},
+        update_time = now()
+   		  where id = #{merId,jdbcType=INTEGER}
+  </update>
+  
+
+
+  <select id="queryMerDetailList" resultType="java.util.Map"  parameterType="com.casaba.dao.bean.QueryMer">
+  	 select m.id, m.mobile,m.mer_name,m.province,m.city,m.area,a.agent_name,m.mdse_name,m.create_time,m.start_time,m.end_time ,m.operator,m.mer_status,m.freeze_time,
+		b.company _name,b.province,b.city,b.area, b.address,b.company_phone,b.contacts,b.contact_mobile,b.contact_telephone,b.email,b.qq
+		from tb_merchant m INNER  JOIN  tb_agent a  on  a.id=m.agent_id LEFT JOIN tb_merchant_business b  on  m.id=b.merchant_id
+		where 
+			m.mer_type=#{merType}
+	    <if test="province !=null and province!=''">
+	      and m.province=#{province}
+	    </if>
+	    <if test="city !=null and city!=''">
+	      and m.city=#{city}
+	    </if>
+	    <if test="area !=null and area!=''">
+	      and m.area  like concat('%',#{area},'%') 
+	    </if>
+	     <if test="mdseId !=null ">
+	      and m.mdse_name=#{mdseName}
+	    </if>
+	     <if test="merStatus !=null and merStatus!=''">
+	      and m.mer_status=#{merStatus}
+	    </if>
+	 
+	     <if test="mobile !=null and mobile!=''">
+	      and m.mobile=#{mobile}
+	    </if>
+	     <if test="mdseId !=null ">
+	      and m.agent_id=#{agentId}
+	    </if>
+	    
+	    order by m.id desc
+  </select>
+  
+     <update id="batchMerEnd" >
+	    update tb_merchant
+	  	 set  
+  	 	 mer_status = #{merStatus,jdbcType=VARCHAR},update_time = now()
+        <where>
+            <foreach collection="merIds" item="item" separator="," open=" id in(" close=")">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+  
+  <select id="queryMerByMobile" resultMap="BaseResultMap" >
+  		 select 
+	    <include refid="Base_Column_List" />
+	    from tb_merchant
+	    where mobile = #{mobile}
+  	
+  </select>
+  
+  
+    
+  <select id="queryMerList" resultMap="BaseResultMap" >
+  		 select 
+	    <include refid="Base_Column_List" />
+	    from tb_merchant
+	    where
+	      mer_type=#{merType}
+	     <if test="province !=null and province!=''">
+	      and province=#{province}
+	    </if>
+	    <if test="city !=null and city!=''">
+	      and city=#{city}
+	    </if>
+	    <if test="area !=null and area!=''">
+	      and area = #{area}
+	    </if>
+	     <if test="mdseName !=null ">
+	      and mdse_name=#{mdseName}
+	    </if>
+	     <if test="merStatus !=null and merStatus!=''">
+	      and mer_status=#{merStatus}
+	    </if>	    
+	     <if test="mobile !=null and mobile!=''">
+	      and mobile=#{mobile}
+	    </if>
+	     <if test="mdseId !=null ">
+	      and agent_id=#{agentId}
+	    </if>
+	  
+	    order by m.id desc
+  	
+  </select>
+  
+   <select id="queryExpireMer" resultMap="BaseResultMap"  >
+   
+      <![CDATA[
+	    select 
+	    <include refid="Base_Column_List" />
+	    from tb_merchant
+	    where  end_time < #{curTime,jdbcType=TIMESTAMP}
+	     and  mer_status = #{merStatus,jdbcType=VARCHAR}    
+	     
+     ]]>
+  </select>
+  
+  
+</mapper>
