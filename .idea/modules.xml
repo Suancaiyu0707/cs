@@ -3,6 +3,15 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/casaba.iml" filepath="$PROJECT_DIR$/.idea/casaba.iml" />
+      <module fileurl="file://$PROJECT_DIR$/casaba-agent-service/casaba-agent-service.iml" filepath="$PROJECT_DIR$/casaba-agent-service/casaba-agent-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/casaba-agent-web/casaba-agent-web.iml" filepath="$PROJECT_DIR$/casaba-agent-web/casaba-agent-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/casaba-auth/casaba-auth.iml" filepath="$PROJECT_DIR$/casaba-auth/casaba-auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/casaba-auth-service/casaba-auth-service.iml" filepath="$PROJECT_DIR$/casaba-auth-service/casaba-auth-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/casaba-common/casaba-common.iml" filepath="$PROJECT_DIR$/casaba-common/casaba-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/casaba-dao/casaba-dao.iml" filepath="$PROJECT_DIR$/casaba-dao/casaba-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/casaba-mer-service/casaba-mer-service.iml" filepath="$PROJECT_DIR$/casaba-mer-service/casaba-mer-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/casaba-service/casaba-service.iml" filepath="$PROJECT_DIR$/casaba-service/casaba-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/casaba-web/casaba-web.iml" filepath="$PROJECT_DIR$/casaba-web/casaba-web.iml" />
     </modules>
   </component>
 </project>

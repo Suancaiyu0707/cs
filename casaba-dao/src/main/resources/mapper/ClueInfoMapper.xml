@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.casaba.dao.mapper.ClueInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.casaba.dao.entity.ClueInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column=" customer_account" property=" customerAccount" jdbcType="VARCHAR" />
+    <result column="contact_mobile" property="contactMobile" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="saler_id" property="salerId" jdbcType="INTEGER" />
+    <result column="saler" property="saler" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="QQ" property="qq" jdbcType="VARCHAR" />
+    <result column="wechat" property="wechat" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="agent_id" property="agentId" jdbcType="INTEGER" />
+    <result column="agent_name" property="agentName" jdbcType="VARCHAR" />
+    <result column="contacts" property="contacts" jdbcType="VARCHAR" />
+    <result column="clue_type" property="clueType" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, customer_name, customer_account,contact_mobile, province, city, area, saler_id, saler, email, QQ, wechat,
+    remark, agent_id, agent_name, contacts, clue_type, status,operator
+  </sql>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_clue_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from tb_clue_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.casaba.dao.entity.ClueInfo" >
+    insert into tb_clue_info (id, customer_name, customer_account, contact_mobile,
+      province, city,area, saler_id,
+      saler, email, QQ, wechat, 
+      remark, agent_id, agent_name, 
+      contacts, clue_type, status,operator
+      )
+    values (#{id,jdbcType=INTEGER},#{customerAccount,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, #{contactMobile,jdbcType=VARCHAR},
+      #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},#{area,jdbcType=VARCHAR}, #{salerId,jdbcType=INTEGER},
+      #{saler,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{agentId,jdbcType=INTEGER}, #{agentName,jdbcType=VARCHAR}, 
+      #{contacts,jdbcType=VARCHAR}, #{clueType,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},#{operator,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateById" parameterType="com.casaba.dao.entity.ClueInfo" >
+    update tb_clue_info
+    set customer_name = #{customerName,jdbcType=VARCHAR},
+     customer_account = #{customerAccount,jdbcType=VARCHAR},
+      contact_mobile = #{contactMobile,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      saler_id = #{salerId,jdbcType=INTEGER},
+      saler = #{saler,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      QQ = #{qq,jdbcType=VARCHAR},
+      wechat = #{wechat,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      agent_id = #{agentId,jdbcType=INTEGER},
+      agent_name = #{agentName,jdbcType=VARCHAR},
+      contacts = #{contacts,jdbcType=VARCHAR},
+      clue_type = #{clueType,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

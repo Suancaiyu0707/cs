@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.casaba.dao.mapper.CanalInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.casaba.dao.entity.CanalInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="canal_name" property="canalName" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="passwd" property="passwd" jdbcType="VARCHAR" />
+    <result column="manager_area" property="managerArea" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, canal_name, mobile, passwd, manager_area
+  </sql>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_canal_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from tb_canal_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.casaba.dao.entity.CanalInfo" >
+    insert into tb_canal_info (id, canal_name, mobile, 
+      passwd, manager_area)
+    values (#{id,jdbcType=INTEGER}, #{canalName,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{passwd,jdbcType=VARCHAR}, #{managerArea,jdbcType=VARCHAR})
+  </insert>
+<update id="updateById" parameterType="com.casaba.dao.entity.CanalInfo" >
+    update tb_canal_info
+    set canal_name = #{canalName,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      passwd = #{passwd,jdbcType=VARCHAR},
+      manager_area = #{managerArea,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

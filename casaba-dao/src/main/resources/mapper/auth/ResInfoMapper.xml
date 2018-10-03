@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.casaba.dao.mapper.auth.ResInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.casaba.dao.entity.auth.ResInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="res_name" property="resName" jdbcType="VARCHAR" />
+    <result column="res_url" property="resUrl" jdbcType="VARCHAR" />
+    <result column="res_code" property="resCode" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="res_type" property="resType" jdbcType="VARCHAR" />
+    <result column="res_order" property="resOrder" jdbcType="VARCHAR" />
+    <result column="res_desc" property="resDesc" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, res_name, res_url, res_code, parent_id, res_type, res_order, res_desc
+  </sql>
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_res_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from tb_res_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.casaba.dao.entity.auth.ResInfo" >
+    insert into tb_res_info (id, res_name, res_url, 
+      res_code, parent_id, res_type, 
+      res_order, res_desc)
+    values (#{id,jdbcType=INTEGER}, #{resName,jdbcType=VARCHAR}, #{resUrl,jdbcType=VARCHAR}, 
+      #{resCode,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, #{resType,jdbcType=VARCHAR}, 
+      #{resOrder,jdbcType=VARCHAR}, #{resDesc,jdbcType=VARCHAR})
+  </insert>
+ <update id="updateById" parameterType="com.casaba.dao.entity.auth.ResInfo" >
+    update tb_res_info
+    set res_name = #{resName,jdbcType=VARCHAR},
+      res_url = #{resUrl,jdbcType=VARCHAR},
+      res_code = #{resCode,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      res_type = #{resType,jdbcType=VARCHAR},
+      res_order = #{resOrder,jdbcType=VARCHAR},
+      res_desc = #{resDesc,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
