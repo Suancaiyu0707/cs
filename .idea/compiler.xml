@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="casaba-agent-service" />
+        <module name="casaba-agent-web" />
+        <module name="casaba-auth" />
+        <module name="casaba-auth-service" />
+        <module name="casaba-common" />
+        <module name="casaba-dao" />
+        <module name="casaba-mer-service" />
+        <module name="casaba-service" />
+        <module name="casaba-web" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="casaba" target="1.8" />
+      <module name="casaba-agent-service" target="1.8" />
+      <module name="casaba-agent-web" target="1.8" />
+      <module name="casaba-auth" target="1.8" />
+      <module name="casaba-auth-service" target="1.8" />
+      <module name="casaba-common" target="1.8" />
+      <module name="casaba-dao" target="1.8" />
+      <module name="casaba-mer-service" target="1.8" />
+      <module name="casaba-service" target="1.8" />
+      <module name="casaba-web" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
